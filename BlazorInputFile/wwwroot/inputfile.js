@@ -9,7 +9,7 @@
                 var fileList = Array.prototype.map.call(elem.files, function (file) {
                     var result = {
                         id: ++elem._blazorInputFileNextFileId,
-                        lastModified: new Date(file.lastModified).toISOString(),
+                        lastModified: new Date(file.lastModified || file.lastModifiedDate).toISOString(),
                         name: file.name,
                         size: file.size,
                         type: file.type,
@@ -25,7 +25,7 @@
 
                 componentInstance.invokeMethodAsync('NotifyChange', fileList).then(function () {
                     //reset file value ,otherwise, the same filename will not be trigger change event again
-                    elem.value = '';
+                    elem.value = null;
                 }, function (err) {
                     //reset file value ,otherwise, the same filename will not be trigger change event again
                     elem.value = '';
@@ -34,7 +34,7 @@
             });
         },
 
-        toImageFile(elem, fileId, format, maxWidth, maxHeight) {
+        toImageFile: function toImageFile(elem, fileId, format, maxWidth, maxHeight) {
             var originalFile = getFileById(elem, fileId);
 
             return new Promise(function (resolve) {
